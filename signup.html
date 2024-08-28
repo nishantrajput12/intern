@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Login & Sign Up</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+        }
+
+        .login-container, .signup-container {
+            text-align: center;
+            max-width: 300px;
+            margin: 0 auto;
+            margin-bottom: 20px;
+        }
+
+        .login-container img,
+        .signup-container img {
+            width: 100px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Login Container -->
+    <div class="login-container">
+        <img src="C:\Users\NISHANT KUMAR\Downloads\login\aiet-logo.png" alt="Logo">
+        <h2 style="color: #262626;">Login</h2>
+        <form id="loginForm" onsubmit="return loginUser()">
+            <div class="form-group">
+                <input type="text" id="username" class="form-control" placeholder="Username" required>
+            </div>
+            <div class="form-group">
+                <input type="password" id="password" class="form-control" placeholder="Password" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block" style="background-color: #3897f0; color: #fff; border: none; border-radius: 3px;">Login</button>
+        </form>
+        <p style="color: #262626;">Don't have an account? <a href="#" style="color: #3897f0; font-weight: bold;" onclick="showSignUp()">Sign up</a></p>
+    </div>
+
+    <!-- Sign-Up Container -->
+    <div class="signup-container" style="display:none;">
+        <img src="C:\Users\NISHANT KUMAR\Downloads\login\aiet-logo.png" alt="Logo">
+        <h2 style="color: #262626;">Sign Up</h2>
+        <form id="signupForm" onsubmit="return signUpUser()">
+            <div class="form-group">
+                <input type="text" id="signupUsername" class="form-control" placeholder="Username" required>
+            </div>
+            <div class="form-group">
+                <input type="email" id="signupEmail" class="form-control" placeholder="Email" required>
+            </div>
+            <div class="form-group">
+                <input type="password" id="signupPassword" class="form-control" placeholder="Password" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block" style="background-color: #3897f0; color: #fff; border: none; border-radius: 3px;">Sign Up</button>
+        </form>
+        <p style="color: #262626;">Already have an account? <a href="#" style="color: #3897f0; font-weight: bold;" onclick="showLogin()">Login</a></p>
+    </div>
+
+    <script>
+        function loginUser() {
+            var username = document.getElementById("username").value;
+            if (username) {
+                localStorage.setItem("userLoggedIn", true);
+                window.location.href = "oder.html";
+                return false;
+            }
+            return true;
+        }
+
+        function signUpUser() {
+            var username = document.getElementById("signupUsername").value;
+            var email = document.getElementById("signupEmail").value;
+            var password = document.getElementById("signupPassword").value;
+            
+            if (username && email && password) {
+                // Save user data to local storage or send to the backend
+                alert("Sign-Up successful! Please log in.");
+                showLogin(); // Show login form after successful sign-up
+                return false; // Prevent the form from submitting
+            }
+            return true;
+        }
+
+        function showSignUp() {
+            document.querySelector('.login-container').style.display = 'none';
+            document.querySelector('.signup-container').style.display = 'block';
+        }
+
+        function showLogin() {
+            document.querySelector('.signup-container').style.display = 'none';
+            document.querySelector('.login-container').style.display = 'block';
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="foodApp">
+<head>
+    <meta charset="UTF-8">
+    <title>Food Ordering System</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+        }
+
+        .login-container, .menu-container, .cart-container, .checkout-container {
+            margin-bottom: 20px;
+        }
+
+        .menu-item {
+            list-style: none;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .cart-item {
+            list-style: none;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        .total {
+            font-weight: bold;
+        }
+
+        .order-success {
+            color: green;
+            font-weight: bold;
+        }
+
+        .menu-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>
+</head>
+<body ng-controller="MainController">
+
+    <!-- <div class="login-container" ng-show="!userLoggedIn">
+        <h2>Login</h2>
+        <form>
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" ng-model="username" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" ng-model="password" class="form-control" required>
+            </div>
+            <button ng-click="login()" class="btn btn-primary">Login</button>
+        </form>
+    </div> -->
+    <div class="login-container" ng-show="!userLoggedIn">
+        <div style="text-align: center;">
+            <img src="https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png" alt="Instagram Logo" style="width: 200px; margin-bottom: 20px;">
+       
+        </div>
+        <h2 style="text-align: center; color: #262626;">Login</h2>
+        <form style="max-width: 300px; margin: 0 auto;">
+            <div class="form-group">
+                <input type="text" id="username" ng-model="username" class="form-control" placeholder="Username" required style="padding: 10px; margin-bottom: 10px; border: 1px solid #dbdbdb; border-radius: 3px;">
+            </div>
+            <div class="form-group">
+                <input type="password" id="password" ng-model="password" class="form-control" placeholder="Password" required style="padding: 10px; margin-bottom: 10px; border: 1px solid #dbdbdb; border-radius: 3px;">
+            </div>
+            <button ng-click="login()" class="btn btn-primary btn-block" style="background-color: #3897f0; color: #fff; padding: 10px; border: none; border-radius: 3px;">Login</button>
+        </form>
+        <p style="text-align: center; margin-top: 20px; color: #262626;">Don't have an account? <a href="#" style="color: #3897f0; font-weight: bold;">Sign up</a></p>
+    </div>
+    
+
+    <div class="menu-container" ng-show="userLoggedIn">
+        <h2>Food Menu</h2>
+        <div class="row">
+            <div class="col-md-4" ng-repeat="item in menu">
+                <div class="card menu-item">
+                    <img ng-src="{{item.image}}" alt="{{item.name}}" class="card-img-top menu-image">
+                    <div class="card-body">
+                        <h5 class="card-title">{{item.name}}</h5>
+                        <p class="card-text">${{item.price}}</p>
+                        <button ng-click="addToCart(item)" class="btn btn-sm btn-success">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3>Your Cart</h3>
+        <ul class="cart-item" ng-repeat="item in cart">
+            <li>{{item.name}} - ${{item.price}}</li>
+        </ul>
+
+        <h3 class="total">Total: ${{getTotal()}}</h3>
+
+        <button ng-click="checkout()" class="btn btn-primary">Checkout</button>
+        <div class="order-success" ng-show="orderSuccess">
+            <h3>Order Successful!</h3>
+            <p>Thank you for ordering with us.</p>
+        </div>
+    </div>
+
+    <script>
+        var app = angular.module('foodApp', []);
+
+        app.controller('MainController', function($scope) {
+            $scope.userLoggedIn = false;
+            $scope.orderSuccess = false;
+            $scope.username = '';
+            $scope.password = '';
+            $scope.menu = [
+                { name: 'Pizza', price: 10, image: 'https://www.foodandwine.com/thmb/Wd4lBRZz3X_8qBr69UOu2m7I2iw=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/classic-cheese-pizza-FT-RECIPE0422-31a2c938fc2546c9a07b7011658cfd05.jpg', },
+                { name: 'Burger', price: 5, image: 'https://www.allrecipes.com/thmb/5JVfA7MxfTUPfRerQMdF-nGKsLY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/25473-the-perfect-basic-burger-DDMFS-4x3-56eaba3833fd4a26a82755bcd0be0c54.jpg' },
+                { name: 'Pasta', price: 8, image: 'https://www.thecookierookie.com/wp-content/uploads/2023/07/featured-chicken-parmesan-pasta-recipe.jpg' }
+            ];
+            $scope.cart = [];
+
+            $scope.login = function() {
+                if ($scope.username) {
+                    $scope.userLoggedIn = true;
+                }
+            };
+
+            $scope.addToCart = function(item) {
+                $scope.cart.push(item);
+            };
+
+            $scope.getTotal = function() {
+                return $scope.cart.reduce(function(total, item) {
+                    return total + item.price;
+                }, 0);
+            };
+
+            $scope.checkout = function() {
+                $scope.orderSuccess = true;
+            };
+        });
+    </script>
+</body>
+</html>
